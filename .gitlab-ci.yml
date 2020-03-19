@@ -16,7 +16,7 @@ deploy_staging:
     - export DISTRIBUTION_ID=$DISTRIBUTION_ID
     - pip install awscli --upgrade --user
     - export PATH=~/.local/bin:$PATH
-    - aws s3 sync --acl public-read --delete / $S3_BUCKET_NAME_STAGING
+    - aws s3 sync . $S3_BUCKET_NAME_STAGING --acl public-read --delete --exclude ".git/*"  --exclude ".gitlab-ci.yml" --exclude "README.md"
     #- aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/*'
     - echo "DEPLOYED SUCCESSFULLY TO STAGING - signup-staging.hive.io"
   environment:
@@ -34,7 +34,7 @@ deploy_master:
     - export DISTRIBUTION_ID=$DISTRIBUTION_ID
     - pip install awscli --upgrade --user
     - export PATH=~/.local/bin:$PATH
-    - aws s3 sync --acl public-read --delete / $S3_BUCKET_NAME_PRODUCTION
+    - aws s3 sync . $S3_BUCKET_NAME_PRODUCTION --acl public-read --delete --exclude ".git/*"  --exclude ".gitlab-ci.yml" --exclude "README.md"
     - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths '/*'
     - echo "DEPLOYED SUCCESSFULLY TO PRODUCTION - signup.hive.io"
   environment:
