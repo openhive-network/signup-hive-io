@@ -611,12 +611,12 @@ a {
     try {
       fetch('https://api2.hivedex.io/price').then(res => res.json()).then(res => {
         if ('price' in res && 'assets' in res && Array.isArray(res.assets) && !isNaN(res.price)) {
-          document.getElementById('hivedex-price').innerHTML = `$ ${res.price}`
+          document.getElementById('hivedex-price').textContent = `$ ${res.price}`
           const assets = []
           for (let i = 0; i < res.assets.length; i++) {
             assets.push(res.assets[i].currency)
           }
-          document.getElementById('hivedex-assets').innerHTML = assets.join(', ')
+          document.getElementById('hivedex-assets').textContent = assets.join(', ')
         }
       }).catch(_e => {})
     } catch (_e) {}
