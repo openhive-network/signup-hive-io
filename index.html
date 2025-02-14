@@ -250,12 +250,14 @@ a {
         <img style="width: 35px; float: left; margin-top: -34px;" src="images/star.svg">-->
       </div>
       <div class="card-body">
-        <h1 class="card-title pricing-card-title">$ 1.49</h1>
+        <h1 class="card-title pricing-card-title" id="hivedex-price">$ 1.49</h1>
         <ul class="list-unstyled mt-3 mb-4">
           <li>Instant</li>
           <li>Anonymous</li>
           <li style="margin-top:8px;">Payments</li>
-          <li style="font-size: 0.85rem;">BTC, USDT, BUSD, LTC, BCH, XMR, BNB, DOGE</li>
+          <li style="font-size: 0.85rem;" id="hivedex-assets">
+            ETH, USDC, TRX, BNB, DOGE, LTC, XMR, USDT, TON, POL, BCH, SHIB, SOL, NOT, DOGS
+          </li>
         </ul>
       </div>
       <div class="card-footer">
@@ -604,6 +606,22 @@ a {
       if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search))
           return decodeURIComponent(name[1]);
   }
+
+  function fetchHivedexPrice() {
+    try {
+      fetch('https://api2.hivedex.io/price').then(res => res.json()).then(res => {
+        if ('price' in res && 'assets' in res && Array.isArray(res.assets)) {
+          document.getElementById('hivedex-price').innerHTML = `$ ${res.price}`
+          const assets = []
+          for (let i = 0; i < res.assets.length; i++) {
+            assets.push(res.assets[i].currency)
+          }
+          document.getElementById('hivedex-assets').innerHTML = assets.join(', ')
+        }
+      }).catch(_e => {})
+    } catch (_e) {}
+  }
+  fetchHivedexPrice()
 
 })();
 </script>
