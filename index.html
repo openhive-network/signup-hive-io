@@ -250,12 +250,14 @@ a {
         <img style="width: 35px; float: left; margin-top: -34px;" src="images/star.svg">-->
       </div>
       <div class="card-body">
-        <h1 class="card-title pricing-card-title">$ 1.49</h1>
+        <h1 class="card-title pricing-card-title" id="hivedex-price">$ 1.49</h1>
         <ul class="list-unstyled mt-3 mb-4">
           <li>Instant</li>
           <li>Anonymous</li>
           <li style="margin-top:8px;">Payments</li>
-          <li style="font-size: 0.85rem;">BTC, USDT, BUSD, LTC, BCH, XMR, BNB, DOGE</li>
+          <li style="font-size: 0.85rem;" id="hivedex-assets">
+            ETH, USDC, TRX, BNB, DOGE, LTC, XMR, USDT, TON, POL, BCH, SHIB, SOL, NOT, DOGS
+          </li>
         </ul>
       </div>
       <div class="card-footer">
@@ -377,7 +379,7 @@ a {
       </div>
     </div>-->
 
-    <div class="card mb-4 box-shadow">
+    <!-- <div class="card mb-4 box-shadow">
       <div class="card-header">
         <h4 class="my-0 font-weight-normal">Discover Hive</h4>
       </div>
@@ -393,7 +395,7 @@ a {
       <div class="card-footer">
         <a href="https://discoverhive.com" target="_blank" class="btn btn-lg btn-block btn-outline-primary">Sign up</a>
       </div>
-    </div>
+    </div> -->
 
   </div>
   <h3 class="pb-3">Why so many options?</h3>
@@ -604,6 +606,22 @@ a {
       if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(window.location.search))
           return decodeURIComponent(name[1]);
   }
+
+  function fetchHivedexPrice() {
+    try {
+      fetch('https://api2.hivedex.io/price').then(res => res.json()).then(res => {
+        if ('price' in res && 'assets' in res && Array.isArray(res.assets) && !isNaN(res.price)) {
+          document.getElementById('hivedex-price').textContent = `$ ${res.price}`
+          const assets = []
+          for (let i = 0; i < res.assets.length; i++) {
+            assets.push(res.assets[i].currency)
+          }
+          document.getElementById('hivedex-assets').textContent = assets.join(', ')
+        }
+      }).catch(_e => {})
+    } catch (_e) {}
+  }
+  fetchHivedexPrice()
 
 })();
 </script>
