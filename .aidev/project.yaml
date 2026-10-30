@@ -1,0 +1,80 @@
+# Profile for hive/signup-hive-io, written by `aidev project scaffold` (#13561).
+#
+# Schema reference: docs/architecture/project-profile.md
+# Onboarding procedure: the `onboard-external-project` skill.
+# Guide: docs/operations/onboarding-an-external-project.md
+#
+# The generator writes a starting point, not a governed answer: every
+# binding below is the command a maintainer said this project runs, and it
+# is reviewed and edited like any other declaration.
+version: 2
+project: signup-hive-io
+
+gitlab:
+  host: "gitlab.syncad.com"
+  path: "hive/signup-hive-io"
+  id: 217
+
+# AIDEV integrates into its own branch (protected: Developers push/merge, no
+# force push) and hands it off to develop by merge request (`aidev handoff`);
+# develop uses merge commits. AIDEV never pushes develop or master, so `stable`
+# is omitted.
+branches:
+  integration: "aidev/integration"
+  handoff: "develop"
+
+# How this project's suites execute (#13892): one kind, stated once. Docker
+# Hub's python:3-alpine (tag as of 2026-10-30), pinned by digest; the checks use
+# the standard library only.
+environment:
+  kind: "container"
+  image: "docker.io/library/python@sha256:20a82dbc2783112ddb91d1534603f802d222a3e63e593cd002eb2ac534e70211"
+
+issues:
+  intake_label: todo
+  taxonomy: ".aidev/labels.yaml"
+  decompose:
+    # `never` is where an external project starts: nothing marks work
+    # approved on this project's behalf until there is a track record.
+    auto_todo: never
+  # Reports about this project's work are filed against this project.
+  watcher_reports: self
+
+# Verification slots. Each binding is what this project genuinely runs for
+# that slot — never one selection repeated under seven names, which makes
+# seven gates report on the same evidence while claiming to check seven
+# different things. Every slot runs .aidev/run-checks.py in the image above,
+# offline. The repository is a static page with no build and no tests: the
+# slots run static checks of the page (see .aidev/README.md).
+verification:
+  quick:
+    adapter: command
+    args: [".aidev/run-checks.py", "quick", "html", "assets", "svg"]
+    artifacts: ["test-results/quick/"]
+  full:
+    adapter: command
+    args: [".aidev/run-checks.py", "full", "html", "assets", "svg"]
+    artifacts: ["test-results/full/"]
+  baseline:
+    adapter: command
+    args: [".aidev/run-checks.py", "baseline", "assets", "svg"]
+    artifacts: ["test-results/baseline/"]
+  canary:
+    adapter: command
+    args: [".aidev/run-checks.py", "canary", "html", "assets", "svg"]
+    artifacts: ["test-results/canary/"]
+  static:
+    adapter: command
+    args: [".aidev/run-checks.py", "static", "html", "svg"]
+    artifacts: ["test-results/static/"]
+  coverage:
+    adapter: command
+    args: [".aidev/run-checks.py", "coverage", "html", "assets", "svg"]
+    artifacts: ["test-results/coverage/"]
+  system:
+    adapter: command
+    args: [".aidev/run-checks.py", "system", "html", "assets", "svg"]
+    artifacts: ["test-results/system/"]
+
+# Capability grants for target-side code. Empty until this project needs one.
+capabilities: []
